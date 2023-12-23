@@ -1,0 +1,10 @@
+[project]
+name = "test"
+homepage = "https://github.com/test"
+license = "GPL"
+#type = "library"
+type = "exe"
+
+[build]
+libraries = ["clang"]
+#arguments = "-g"

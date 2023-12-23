@@ -1,0 +1,66 @@
+enum CXTranslationUnit_Flags {
+    CXTranslationUnit_None = 0x0
+    CXTranslationUnit_DetailedPreprocessingRecord = 0x01
+    CXTranslationUnit_Incomplete = 0x02
+    CXTranslationUnit_PrecompiledPreamble = 0x04
+    CXTranslationUnit_CacheCompletionResults = 0x08
+    CXTranslationUnit_ForSerialization = 0x10
+    CXTranslationUnit_CXXChainedPCH = 0x20
+    CXTranslationUnit_SkipFunctionBodies = 0x40
+    CXTranslationUnit_IncludeBriefCommentsInCodeCompletion = 0x80
+    CXTranslationUnit_CreatePreambleOnFirstParse = 0x100
+    CXTranslationUnit_KeepGoing = 0x200
+    CXTranslationUnit_SingleFileParse = 0x400
+    CXTranslationUnit_LimitSkipFunctionBodiesToPreamble = 0x800
+    CXTranslationUnit_IncludeAttributedTypes = 0x1000
+    CXTranslationUnit_VisitImplicitAttributes = 0x2000
+    CXTranslationUnit_IgnoreNonErrorsFromIncludedFiles = 0x4000
+    CXTranslationUnit_RetainExcludedConditionalBlocks = 0x8000
+}
+enum CXChildVisitResult {
+  CXChildVisit_Break
+  CXChildVisit_Continue
+  CXChildVisit_Recurse
+}
+type CXIndex void ptr;
+type CXTranslationUnit void ptr;
+type CXClientData void ptr;
+struct CXUnsavedFile {
+    var Filename : i8 ptr
+    var Contents : i8 ptr
+    var Length : u64
+}
+// https://clang.llvm.org/doxygen/Index_8h_source.html#l02259
+struct CXCursor {
+  var kind : int
+  var xdata : int
+  var data[3] : void ptr
+}
+
+extern clang_createIndex(excludeDeclarationsFromPCH : int, displayDiagnostics : int) CXIndex;
+extern clang_parseTranslationUnit(idx : CXIndex, source_filename : i8 ptr, cmd_args : i8 ptr, cmd_args_nb : int, unsaved_files : struct CXUnsavedFile ptr, unsaved_files_nb : u32, options : u32) CXTranslationUnit;
+extern clang_getTranslationUnitCursor(translationUnit : CXTranslationUnit) struct CXCursor;
+extern clang_visitChildren(parent : struct CXCursor, visitor : void ptr, client_data : CXClientData) u32;
+extern clang_disposeTranslationUnit(translationUnit : CXTranslationUnit) void;
+extern clang_disposeIndex(index : CXIndex) void;
+
+mod clang {
+    func createIndex(excludeDeclarationsFromPCH : int, displayDiagnostics : int) CXIndex {
+        clang_createIndex(excludeDeclarationsFromPCH, displayDiagnostics)
+    }
+    func parseTranslationUnit(idx : CXIndex, source_filename : i8 ptr, cmd_args : i8 ptr, cmd_args_nb : int, unsaved_files : struct CXUnsavedFile ptr, unsaved_files_nb : u32, options : u32) CXTranslationUnit {
+        clang_parseTranslationUnit(idx, source_filename, cmd_args, cmd_args_nb, unsaved_files, unsaved_files_nb, options)
+    }
+    func getTranslationUnitCursor(translationUnit : CXTranslationUnit) struct CXCursor {
+        clang_getTranslationUnitCursor(translationUnit)
+    }
+    func visitChildren(parent : struct CXCursor, visitor : void ptr, client_data : CXClientData) u32 {
+        clang_visitChildren(parent, visitor, client_data)
+    }
+    func disposeTranslationUnit(translationUnit : CXTranslationUnit) void {
+        clang_disposeTranslationUnit(translationUnit)
+    }
+    func disposeIndex(index : CXIndex) void {
+        clang_disposeIndex(index)
+    }
+}

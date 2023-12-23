@@ -1,0 +1,33 @@
+import clang.cpoint
+import @std/print.cpoint
+import @std/process.cpoint
+
+func cursorVisitor(cursor : struct CXCursor, parent : struct CXCursor, client_data : CXClientData) u32 {
+    printd(0)
+    CXChildVisitResult::CXChildVisit_Recurse
+}
+
+func main(){
+    printd(2)
+    var cursor : struct CXCursor
+    var index = clang::createIndex(0, 0)
+    if index == null {
+        #println("Unable to parse create index")
+        process::exit(1)
+    }
+    printd(3)
+    var path = "test.h"
+    var unit = clang::parseTranslationUnit(index, path, null, 0, null, 0, CXTranslationUnit_Flags::CXTranslationUnit_None)
+    printd(4)
+    if unit == null {
+        #println("Unable to parse Translation Unit")
+        process::exit(1)
+    }
+    printd(2)
+    cursor = clang::getTranslationUnitCursor(unit)
+    clang::visitChildren(cursor, cursorVisitor, null)
+
+    clang::disposeTranslationUnit(unit)
+    clang::disposeIndex(index)
+    0
+}

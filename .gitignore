@@ -1,0 +1,9 @@
+*.out
+*.a
+*.ll
+*.o
+*.log
+*.temp
+bindings.cpoint
+bindings.h
+*.s
