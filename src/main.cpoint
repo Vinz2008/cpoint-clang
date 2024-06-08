@@ -26,6 +26,5 @@ func main(){
     clang::visitChildren(cursor, cursorVisitor, null)
     clang::disposeTranslationUnit(unit)
     clang::disposeIndex(index)
-    printstr("end")
     0
 }
