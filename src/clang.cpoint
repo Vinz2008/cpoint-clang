@@ -18,9 +18,9 @@ enum CXTranslationUnit_Flags {
     CXTranslationUnit_RetainExcludedConditionalBlocks = 0x8000
 }
 enum CXChildVisitResult {
-  CXChildVisit_Break
-  CXChildVisit_Continue
-  CXChildVisit_Recurse
+  CXChildVisit_Break = 0
+  CXChildVisit_Continue = 1
+  CXChildVisit_Recurse = 2
 }
 enum CXCursorKind {
 	CXCursor_UnexposedDecl = 1
